@@ -35,7 +35,7 @@ public:
 	}
 
 	// init from quaternion
-	_forceinline matrix3x3( const Vector4D &quaternion )
+	__forceinline matrix3x3( const Vector4D &quaternion )
 	{
 		mat[0][0] = 1.0f - 2.0f * (quaternion.y * quaternion.y + quaternion.z * quaternion.z);
 		mat[1][0] = 2.0f * (quaternion.x * quaternion.y - quaternion.z * quaternion.w);
@@ -49,7 +49,7 @@ public:
 	}
 
 	// init from angles
-	_forceinline matrix3x3( const Vector &angles )
+	__forceinline matrix3x3( const Vector &angles )
 	{
 		float	angle, sr, sp, sy, cr, cp, cy;
 
@@ -126,7 +126,7 @@ public:
 	operator float *() { return (float *)&mat[0][0]; }
 	operator const float *() const { return (float *)&mat[0][0]; } 
 
-	_forceinline int operator == ( const matrix3x3& mat2 ) const
+	__forceinline int operator == ( const matrix3x3& mat2 ) const
 	{
 		if( mat[0][0] != mat2[0][0] || mat[0][1] != mat2[0][1] || mat[0][2] != mat2[0][2] )
 			return false;
@@ -137,7 +137,7 @@ public:
 		return true;
 	}
 
-	_forceinline int operator != ( const matrix3x3& mat2 ) const { return !(*this == mat2 ); }
+	__forceinline int operator != ( const matrix3x3& mat2 ) const { return !(*this == mat2 ); }
 	matrix3x3& operator=(const matrix3x4 &vOther);
 	matrix3x3& operator=(const matrix4x4 &vOther);
 
@@ -223,7 +223,7 @@ public:
 	}
 
 	// init from entity
-	_forceinline matrix3x4( Vector origin, Vector angles, float scale = 1.0f )
+	__forceinline matrix3x4( Vector origin, Vector angles, float scale = 1.0f )
 	{
 		float	angle, sr, sp, sy, cr, cp, cy;
 
@@ -305,7 +305,7 @@ public:
 	}
 
 	// init from quaternion + origin
-	_forceinline matrix3x4( Vector origin, Vector4D quaternion )
+	__forceinline matrix3x4( Vector origin, Vector4D quaternion )
 	{
 		mat[0][0] = 1.0f - 2.0f * (quaternion.y * quaternion.y + quaternion.z * quaternion.z);
 		mat[1][0] = 2.0f * (quaternion.x * quaternion.y - quaternion.z * quaternion.w);
@@ -322,7 +322,7 @@ public:
 	}
 
 	// init from rotational matrix
-	_forceinline matrix3x4( const matrix3x3 &in )
+	__forceinline matrix3x4( const matrix3x3 &in )
 	{
 		mat[0][0] = in[0][0];
 		mat[0][1] = in[0][1];
@@ -346,7 +346,7 @@ public:
 	operator float *() { return (float *)&mat[0][0]; }
 	operator const float *() const { return (float *)&mat[0][0]; } 
 
-	_forceinline int operator == ( const matrix3x4& mat2 ) const
+	__forceinline int operator == ( const matrix3x4& mat2 ) const
 	{
 		if( mat[0][0] != mat2[0][0] || mat[0][1] != mat2[0][1] || mat[0][2] != mat2[0][2] )
 			return false;
@@ -359,7 +359,7 @@ public:
 		return true;
 	}
 
-	_forceinline int operator != ( const matrix3x4& mat2 ) const { return !(*this == mat2 ); }
+	__forceinline int operator != ( const matrix3x4& mat2 ) const { return !(*this == mat2 ); }
 	matrix3x4& operator=( const matrix3x3 &vOther );
 	matrix3x4& operator=( const matrix4x4 &vOther );
 
@@ -472,7 +472,7 @@ public:
 	}
 
 	// init from entity
-	_forceinline matrix4x4( const Vector &origin, const Vector &angles, float scale = 1.0f )
+	__forceinline matrix4x4( const Vector &origin, const Vector &angles, float scale = 1.0f )
 	{
 		float	angle, sr, sp, sy, cr, cp, cy;
 
@@ -570,7 +570,7 @@ public:
 	}
 
 	// init from quaternion + origin
-	_forceinline matrix4x4( const Vector &origin, const Vector4D &quaternion )
+	__forceinline matrix4x4( const Vector &origin, const Vector4D &quaternion )
 	{
 		mat[0][0] = 1.0f - 2.0f * (quaternion.y * quaternion.y + quaternion.z * quaternion.z);
 		mat[1][0] = 2.0f * (quaternion.x * quaternion.y - quaternion.z * quaternion.w);
@@ -591,7 +591,7 @@ public:
 	}
 
 	// init from matrix3x4
-	_forceinline matrix4x4( const matrix3x4 &in )
+	__forceinline matrix4x4( const matrix3x4 &in )
 	{
 		mat[0][0] = in[0][0];
 		mat[0][1] = in[0][1];
@@ -628,7 +628,7 @@ public:
 	operator float *() { return (float *)&mat[0][0]; }
 	operator const float *() const { return (float *)&mat[0][0]; } 
 
-	_forceinline int operator == ( const matrix4x4& mat2 ) const
+	__forceinline int operator == ( const matrix4x4& mat2 ) const
 	{
 		if( mat[0][0] != mat2[0][0] || mat[0][1] != mat2[0][1] || mat[0][2] != mat2[0][2] || mat[0][3] != mat2[0][3] )
 			return false;
@@ -641,7 +641,7 @@ public:
 		return true;
 	}
 
-	_forceinline int operator != ( const matrix4x4& mat2 ) const { return !(*this == mat2 ); }
+	__forceinline int operator != ( const matrix4x4& mat2 ) const { return !(*this == mat2 ); }
 	matrix4x4& operator=( const matrix3x3 &vOther );
 	matrix4x4& operator=( const matrix3x4 &vOther );
 	matrix4x4& operator=( const matrix4x4 &vOther );

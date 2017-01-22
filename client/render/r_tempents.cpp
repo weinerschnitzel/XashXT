@@ -178,7 +178,7 @@ void HUD_TempEntUpdate(
 			
 			else 
 			{
-				pTemp->entity.origin += pTemp->entity.baseline.origin * frametime;
+				pTemp->entity.origin = pTemp->entity.origin + pTemp->entity.baseline.origin * frametime;
 			}
 			
 			if( pTemp->flags & FTENT_SPRANIMATE )
@@ -213,7 +213,7 @@ void HUD_TempEntUpdate(
 
 			if( pTemp->flags & FTENT_ROTATE )
 			{
-				pTemp->entity.angles += pTemp->entity.baseline.angles * frametime;
+				pTemp->entity.angles = pTemp->entity.angles + ( pTemp->entity.baseline.angles * frametime );
 				pTemp->entity.latched.prevangles = pTemp->entity.angles;
 			}
 
@@ -261,7 +261,7 @@ void HUD_TempEntUpdate(
 						if( pTemp->flags & FTENT_SPARKSHOWER )
 						{
 							// Chop spark speeds a bit more
-							pTemp->entity.baseline.origin *= 0.6f;
+							pTemp->entity.baseline.origin = pTemp->entity.baseline.origin * 0.6f;
 
 							if( pTemp->entity.baseline.origin.Length() < 10.0f )
 							{
@@ -320,7 +320,7 @@ void HUD_TempEntUpdate(
 						if ( damp != 0 )
 						{
 							proj = DotProduct( pTemp->entity.baseline.origin, traceNormal );
-							pTemp->entity.baseline.origin += traceNormal * (-proj * 2);
+							pTemp->entity.baseline.origin = pTemp->entity.baseline.origin + traceNormal * (-proj * 2);
 	         
 							// reflect rotation (fake)
                    						pTemp->entity.angles.y = -pTemp->entity.angles.y;
@@ -328,8 +328,8 @@ void HUD_TempEntUpdate(
 						
 						if( damp != 1.0f )
 						{
-							pTemp->entity.baseline.origin *= damp;
-							pTemp->entity.angles *= 0.9;
+							pTemp->entity.baseline.origin = pTemp->entity.baseline.origin * damp;
+							pTemp->entity.angles = pTemp->entity.angles * 0.9;
 						}
 					}
 				}

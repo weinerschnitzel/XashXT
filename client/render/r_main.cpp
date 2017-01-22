@@ -253,7 +253,7 @@ void R_ScreenToWorld( const Vector &screen, Vector &point )
 	point[1] = temp[0] * screenToWorld[1][0] + temp[1] * screenToWorld[1][1] + temp[2] * screenToWorld[1][2] + screenToWorld[1][3];
 	point[2] = temp[0] * screenToWorld[2][0] + temp[1] * screenToWorld[2][1] + temp[2] * screenToWorld[2][2] + screenToWorld[2][3];
 	w = temp[0] * screenToWorld[3][0] + temp[1] * screenToWorld[3][1] + temp[2] * screenToWorld[3][2] + screenToWorld[3][3];
-	if( w ) point *= ( 1.0f / w );
+	if( w ) point = ( point * ( 1.0f / w ) );
 }
 
 /*

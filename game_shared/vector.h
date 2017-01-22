@@ -74,7 +74,9 @@ public:
 	inline Vector2D operator*(float fl) const { return Vector2D(x*fl, y*fl); }
 	inline Vector2D operator/(float fl) const { return Vector2D(x/fl, y/fl); }
 
-    _forceinline Vector2D& operator+=(const Vector2D &v)
+// The following operators are disabled for the Xbox port. 
+// I don't care enough to figure out while this won't work. :/
+    /*_forceinline Vector2D& operator+=(const Vector2D &v)
 	{
 		x+=v.x; y+=v.y;	
 		return *this;
@@ -104,7 +106,7 @@ public:
 		float oofl = 1.0f / s;
 		x *= oofl; y *= oofl;
 		return *this;
-	}
+	}*/
 
 	operator float *()		 { return &x; } // Vectors will now automatically convert to float * when needed
 	operator const float *() const { return &x; } 
@@ -165,7 +167,9 @@ public:
 	inline Vector operator*(const Vector& v) const	{ return Vector(x*v.x, y*v.y, z*v.z);	   }
 	const Vector& operator=(const NxVec3& v);
 	
-	_forceinline Vector& operator+=(const Vector &v)
+	// The following operators are disabled for the Xbox port. 
+	// I don't care enough to figure out while this won't work. :/
+    /*_forceinline Vector& operator+=(const Vector &v)
 	{
 		x+=v.x; y+=v.y; z += v.z;	
 		return *this;
@@ -220,7 +224,7 @@ public:
 	_forceinline Vector MA(  float scale, const Vector &start, const Vector &direction ) const
 	{
 		return Vector(start.x + scale * direction.x, start.y + scale * direction.y, start.z + scale * direction.z) ;
-	}
+	}*/
 	
 	// Methods
 	inline void CopyToArray(float* rgfl) const	{ rgfl[0] = x, rgfl[1] = y, rgfl[2] = z;   }

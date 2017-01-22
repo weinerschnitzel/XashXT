@@ -1444,9 +1444,9 @@ void CStudioModelRenderer::ProjectDecalOntoMesh( DecalBuildInfo_t& build )
 		bool inValidArea = TransformToDecalSpace( build, vertex, vertexBone, pVertexInfo[j].m_UV );
 		pVertexInfo[j].m_InValidArea = inValidArea;
 
-		pVertexInfo[j].m_UV *= invRadius * 0.5f;
-		pVertexInfo[j].m_UV[0] += 0.5f;
-		pVertexInfo[j].m_UV[1] += 0.5f;
+		pVertexInfo[j].m_UV = pVertexInfo[j].m_UV * ( invRadius * 0.5f );
+		pVertexInfo[j].m_UV[0] = pVertexInfo[j].m_UV[0] + 0.5f;
+		pVertexInfo[j].m_UV[1] = pVertexInfo[j].m_UV[1] + 0.5f;
 	}
 }
 
@@ -2408,7 +2408,7 @@ void CStudioModelRenderer::StudioEntityLight( alight_t *lightinfo )
 
 			if( dist )
 			{
-				vec *= ( 1.0f / dist );
+				vec = vec * ( 1.0f / dist );
 				lightinfo->ambientlight += atten;
 				lightinfo->shadelight += atten;
 			}
@@ -2464,23 +2464,23 @@ void CStudioModelRenderer::StudioLighting( Vector &lv, int bone, int flags, Vect
 
 	if( flags & STUDIO_NF_FLATSHADE )
 	{
-		illum += m_pLightInfo->lightColor * 0.8f;
+		illum = illum + ( m_pLightInfo->lightColor * 0.8f );
 	}
-          else
-          {
+	else
+	{
 		float	r, lightcos;
 		int	i;
 
 		lightcos = DotProduct( normal, m_pLightInfo->blightVec[bone] ); // -1 colinear, 1 opposite
 
 		if( lightcos > 1.0f ) lightcos = 1;
-		illum += m_pLightInfo->lightColor;
+		illum = illum + ( m_pLightInfo->lightColor );
 
 		r = m_pCvarLambert->value;
 		if( r < 1.0f ) r = 1.0f;
 
 		lightcos = (lightcos + ( r - 1.0f )) / r; // do modified hemispherical lighting
-		if( lightcos > 0.0f ) illum += (m_pLightInfo->lightColor * -lightcos);
+		if( lightcos > 0.0f ) illum = illum + (m_pLightInfo->lightColor * -lightcos);
 
 		// to avoid inverse lighting		
 		if( illum[0] <= 0.0f ) illum[0] = 0.0f;
@@ -2491,7 +2491,7 @@ void CStudioModelRenderer::StudioLighting( Vector &lv, int bone, int flags, Vect
 		for( i = 0; i < m_pLightInfo->numElights; i++)
 		{
 			lightcos = -DotProduct( normal, m_pLightInfo->elightVec[i][bone] );
-			if( lightcos > 0 ) illum += m_pLightInfo->elightColor[i] * lightcos;
+			if( lightcos > 0 ) illum = illum + ( m_pLightInfo->elightColor[i] * lightcos );
 		}
 	}
 

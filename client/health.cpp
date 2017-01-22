@@ -237,7 +237,7 @@ void CHudHealth::CalcDamageDirection( Vector vecFrom )
 	vecOrigin = gHUD.m_vecOrigin;
 	vecAngles = gHUD.m_vecAngles;
 
-	vecFrom -= vecOrigin;
+	vecFrom = vecFrom - vecOrigin;
 
 	float flDistToTarget = vecFrom.Length();
 

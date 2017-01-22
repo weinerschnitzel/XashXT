@@ -134,7 +134,7 @@ void V_DropPunchAngle( float frametime,  Vector &punchangle )
 
     len -= (10.0 + len * 0.5) * frametime;
     len = max( len, 0.0 );
-    punchangle *= len;
+    punchangle = punchangle * len;
 }
 
 
@@ -620,7 +620,7 @@ void V_CalcCameraRefdef( struct ref_params_s *pparams )
 			if( viewpos == g_vecZero )
 				viewpos = Vector( 0, 0, 8 );	// monster_cockroach
 
-			pparams->vieworg += viewpos + forward * 8;	// best value for humans
+			pparams->vieworg = pparams->vieworg + ( viewpos + forward * 8 );	// best value for humans
 			pparams->fov_x = 100; // adjust fov for monster view
 			pparams->fov_y = V_CalcFov( pparams->fov_x, pparams->viewport[2], pparams->viewport[3] );
 		}
@@ -725,7 +725,7 @@ void V_CalcThirdPersonRefdef( struct ref_params_s * pparams )
 	static float lasttime, oldz = 0;
 
 	pparams->vieworg = pparams->simorg;
-	pparams->vieworg += pparams->viewheight;
+	pparams->vieworg = pparams->vieworg + pparams->viewheight;
 	pparams->viewangles = pparams->cl_viewangles;
 
 	V_CalcSendOrigin( pparams );
@@ -905,9 +905,9 @@ void V_InterpolatePos( struct ref_params_s *pparams )
 				if( delta.Length() < 64 )
 				{
 					delta = neworg - pparams->simorg;
-					pparams->simorg += delta;
-					pparams->vieworg += delta;
-					view->origin += delta;
+					pparams->simorg = pparams->simorg + delta;
+					pparams->vieworg = pparams->vieworg + delta;
+					view->origin = view->origin + delta;
 				}
 			}
 		}
@@ -924,8 +924,8 @@ void V_CalcFirstPersonRefdef( struct ref_params_s *pparams )
 	float bob = V_CalcBob( pparams );
 
 	pparams->vieworg = pparams->simorg;
-	pparams->vieworg += pparams->viewheight;
-	pparams->vieworg.z += bob;
+	pparams->vieworg = pparams->vieworg + pparams->viewheight;
+	pparams->vieworg.z = pparams->vieworg.z + bob;
 
 	pparams->viewangles = pparams->cl_viewangles;
 
@@ -950,14 +950,14 @@ void V_CalcFirstPersonRefdef( struct ref_params_s *pparams )
 
 	// use predicted origin as view origin.
 	view->origin = pparams->simorg;      
-	view->origin += pparams->viewheight;
-	view->origin.z += waterOffset;
+	view->origin = view->origin + pparams->viewheight;
+	view->origin.z = view->origin.z + waterOffset;
 
 	// Let the viewmodel shake at about 10% of the amplitude
 	gEngfuncs.V_ApplyShake( view->origin, view->angles, 0.9f );
 
-	view->origin += pparams->forward * bob * 0.4f;
-	view->origin.z += bob;
+	view->origin = view->origin + pparams->forward * bob * 0.4f;
+	view->origin.z = view->origin.z + bob;
 
 	view->angles[PITCH] -= bob * 0.3f;
 	view->angles[YAW] -= bob * 0.5f;
@@ -985,8 +985,8 @@ void V_CalcFirstPersonRefdef( struct ref_params_s *pparams )
 
 	V_CalcViewModelLag( pparams, view->origin, view->angles, lastAngles );
 		
-	pparams->viewangles += pparams->punchangle;
-    pparams->viewangles += ev_punchangle;
+	pparams->viewangles = pparams->viewangles + pparams->punchangle;
+    pparams->viewangles = pparams->viewangles + ev_punchangle;
 
     V_DropPunchAngle(pparams->frametime,ev_punchangle);
 

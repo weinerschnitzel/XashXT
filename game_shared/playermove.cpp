@@ -1156,7 +1156,7 @@ void PM_WalkMove( void )
 //
 	if (wishspeed > pmove->maxspeed)
 	{
-		wishvel *= ( pmove->maxspeed / wishspeed );
+		wishvel = wishvel * ( pmove->maxspeed / wishspeed );
 		wishspeed = pmove->maxspeed;
 	}
 
@@ -1166,7 +1166,7 @@ void PM_WalkMove( void )
 	pmove->velocity[2] = 0;
 
 	// Add in any base velocity to the current velocity.
-	pmove->velocity += pmove->basevelocity;
+	pmove->velocity = pmove->velocity + pmove->basevelocity;
 
 	spd = pmove->velocity.Length();
 
@@ -1349,7 +1349,7 @@ void PM_Friction (void)
 	newspeed /= speed;
 
 	// Adjust velocity according to proportion.
-	pmove->velocity *= newspeed;
+	pmove->velocity = pmove->velocity * newspeed;
 }
 
 void PM_AirAccelerate (Vector wishdir, float wishspeed, float accel)
@@ -1425,13 +1425,13 @@ void PM_WaterMove (void)
 	// Cap speed.
 	if (wishspeed > pmove->maxspeed)
 	{
-		wishvel *= ( pmove->maxspeed / wishspeed );
+		wishvel = wishvel * ( pmove->maxspeed / wishspeed );
 		wishspeed = pmove->maxspeed;
 	}
 	// Slow us down a bit.
 	wishspeed *= 0.8;
 
-	pmove->velocity += pmove->basevelocity;
+	pmove->velocity = pmove->velocity + pmove->basevelocity;
 
 	// water friction
 	speed = pmove->velocity.Length();
@@ -1441,7 +1441,7 @@ void PM_WaterMove (void)
 		newspeed = speed - pmove->frametime * speed * pmove->movevars->friction * pmove->friction;
 
 		if( newspeed < 0 ) newspeed = 0;
-		pmove->velocity *= ( newspeed / speed );
+		pmove->velocity = pmove->velocity * ( newspeed / speed );
 	}
 	else
 		newspeed = 0;
@@ -1528,14 +1528,14 @@ void PM_AirMove (void)
 	// Clamp to server defined max speed
 	if (wishspeed > pmove->maxspeed)
 	{
-		wishvel *= ( pmove->maxspeed / wishspeed );
+		wishvel = wishvel * ( pmove->maxspeed / wishspeed );
 		wishspeed = pmove->maxspeed;
 	}
 	
 	PM_AirAccelerate (wishdir, wishspeed, pmove->movevars->airaccelerate);
 
 	// Add in any base velocity to the current velocity.
-	pmove->velocity += pmove->basevelocity;
+	pmove->velocity = pmove->velocity + pmove->basevelocity;
 
 	PM_FlyMove ();
 }
@@ -1854,7 +1854,7 @@ void PM_SpectatorMove (void)
 				newspeed = 0;
 			newspeed /= speed;
 
-			pmove->velocity *= newspeed;
+			pmove->velocity = pmove->velocity * newspeed;
 		}
 
 		// accelerate
@@ -1879,7 +1879,7 @@ void PM_SpectatorMove (void)
 		//
 		if (wishspeed > pmove->movevars->spectatormaxspeed)
 		{
-			wishvel *= ( pmove->movevars->spectatormaxspeed / wishspeed );
+			wishvel = wishvel * ( pmove->movevars->spectatormaxspeed / wishspeed );
 			wishspeed = pmove->movevars->spectatormaxspeed;
 		}
 
@@ -1892,10 +1892,10 @@ void PM_SpectatorMove (void)
 		if (accelspeed > addspeed)
 			accelspeed = addspeed;
 		
-		pmove->velocity += wishdir * accelspeed;	
+		pmove->velocity = pmove->velocity + ( wishdir * accelspeed );	
 
 		// move
-		pmove->origin += pmove->velocity * pmove->frametime;
+		pmove->origin = pmove->origin + ( pmove->velocity * pmove->frametime );
 	}
 	else
 	{
@@ -2167,7 +2167,7 @@ void PM_LadderMove( physent_t *pLadder )
 				// Calculate player's intended velocity
 				//Vector velocity = (forward * gpGlobals->v_forward) + (right * gpGlobals->v_right);
 				velocity = vpn * forward;
-				velocity += v_right * right;
+				velocity = velocity + ( v_right * right );
 
 				
 				// Perpendicular in the ladder plane
@@ -2193,7 +2193,7 @@ void PM_LadderMove( physent_t *pLadder )
 
 				if( onFloor && normal > 0 )	// On ground moving away from the ladder
 				{
-					pmove->velocity += trace.plane.normal * MAX_CLIMB_SPEED;
+					pmove->velocity = pmove->velocity + ( trace.plane.normal * MAX_CLIMB_SPEED );
 				}
 				//pev->velocity = lateral - (CrossProduct( trace.vecPlaneNormal, perp ) * normal);
 			}
@@ -2349,12 +2349,12 @@ void PM_Physics_Toss()
 // move origin
 	// Base velocity is not properly accounted for since this entity will move again after the bounce without
 	// taking it into account
-	pmove->velocity += pmove->basevelocity;
+	pmove->velocity = pmove->velocity + pmove->basevelocity;
 	
 	PM_CheckVelocity();
 
 	move = pmove->velocity * pmove->frametime;
-	pmove->velocity -= pmove->basevelocity;
+	pmove->velocity = pmove->velocity - pmove->basevelocity;
 
 	trace = PM_PushEntity (move);	// Should this clear basevelocity
 
@@ -2414,7 +2414,7 @@ void PM_Physics_Toss()
 			trace = PM_PushEntity (move);
 		}
 
-		pmove->velocity -= base;
+		pmove->velocity = pmove->velocity - base;
 	}
 	
 // check for in water
@@ -2444,7 +2444,7 @@ void PM_NoClip()
 	wishvel = pmove->forward * fmove + pmove->right * smove;
 
 	wishvel[2] += pmove->cmd.upmove;
-	pmove->origin += wishvel * pmove->frametime;
+	pmove->origin = pmove->origin + ( wishvel * pmove->frametime );
 	
 	// Zero out the velocity so that we don't accumulate a huge downward velocity from
 	//  gravity, etc.
@@ -2483,7 +2483,7 @@ void PM_PreventMegaBunnyJumping( void )
 
 	fraction = ( maxscaledspeed / spd ) * 0.65; //Returns the modifier for the velocity
 	
-	pmove->velocity *= fraction; //Crop it down!.
+	pmove->velocity = pmove->velocity * fraction; //Crop it down!.
 }
 
 /*
@@ -2848,7 +2848,7 @@ void PM_DropPunchAngle( Vector &punchangle )
 
 	len -= (10.0 + len * 0.5) * pmove->frametime;
 	len = max( len, 0.0 );
-	punchangle *= len;
+	punchangle = punchangle * len;
 }
 
 /*
@@ -2907,7 +2907,7 @@ void PM_CheckParamters( void )
 	if ( !pmove->dead )
 	{
 		v_angle = pmove->cmd.viewangles;          
-		v_angle += pmove->punchangle;
+		v_angle = v_angle + pmove->punchangle;
 
 		// set up view angles.
 		pmove->angles[PITCH] = v_angle[PITCH];
@@ -3059,7 +3059,7 @@ void PM_PlayerMove ( qboolean server )
 	// Slow down, I'm pulling it! (a box maybe) but only when I'm standing on ground
 	if ( ( pmove->onground != -1 ) && ( pmove->cmd.buttons & IN_USE) )
 	{
-		pmove->velocity *= 0.3f;
+		pmove->velocity = pmove->velocity * 0.3f;
 	}
 
 	// Handle movement
@@ -3101,11 +3101,11 @@ void PM_PlayerMove ( qboolean server )
 		}
 		
 		// perform the move accounting for any base velocity.
-		pmove->velocity += pmove->basevelocity;
+		pmove->velocity = pmove->velocity + pmove->basevelocity;
 
 		PM_FlyMove();
 
-		pmove->velocity -= pmove->basevelocity;
+		pmove->velocity = pmove->velocity - pmove->basevelocity;
 		break;
 
 	case MOVETYPE_WALK:
@@ -3153,7 +3153,7 @@ void PM_PlayerMove ( qboolean server )
 			// Perform regular water movement
 			PM_WaterMove();
 			
-			pmove->velocity -= pmove->basevelocity;
+			pmove->velocity = pmove->velocity - pmove->basevelocity;
 
 			// Get a final position
 			PM_CatagorizePosition();
@@ -3202,7 +3202,7 @@ void PM_PlayerMove ( qboolean server )
 			// Now pull the base velocity back out.
 			// Base velocity is set if you are on a moving object, like
 			//  a conveyor (or maybe another monster?)
-			pmove->velocity -= pmove->basevelocity;
+			pmove->velocity = pmove->velocity - pmove->basevelocity;
 				
 			// Make sure velocity is valid.
 			PM_CheckVelocity();

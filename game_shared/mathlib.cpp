@@ -437,7 +437,7 @@ Frac is 0.0 to 1.0
 */
 void InterpolateOrigin( const Vector& start, const Vector& end, Vector& output, float frac, bool back )
 {
-	if( back ) output += frac * ( end - start );
+	if( back ) output = output + ( frac * ( end - start ) );
 	else output = start + frac * ( end - start );
 }
 
