@@ -5,8 +5,10 @@
 
 #define NOMINMAX
 
-#ifdef _WIN32
+#if defined(_WIN32) && !defined(_XBOX)
 #include <windows.h>
+#elif defined(_XBOX)
+#include <xtl.h>
 #else
 #include <ctype.h>
 #endif
@@ -458,7 +460,7 @@ int Q_vsnprintf( char *buffer, size_t buffersize, const char *format, va_list ar
 {
 	int	result;
 
-    result = vsnprintf( buffer, buffersize, format, args );
+    result = _vsnprintf( buffer, buffersize, format, args );
 
 	if( result < 0 || result >= buffersize )
 	{

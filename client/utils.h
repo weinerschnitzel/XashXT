@@ -18,12 +18,16 @@ GNU General Public License for more details.
 
 #include "cvardef.h"
 
+#if defined(_WIN32) && !defined(_XBOX) 
 #define EXPORT	_declspec( dllexport )
-
-#ifdef _WIN32
-#define DLLEXPORT __declspec( dllexport )
 #else
-#define DLLEXPORT
+#define EXPORT	/* */
+#endif
+
+#if defined(_WIN32) && !defined(_XBOX) 
+#define DLLEXPORT	__declspec( dllexport )
+#else
+#define DLLEXPORT	/* */
 #endif
 
 

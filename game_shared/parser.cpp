@@ -15,8 +15,10 @@ GNU General Public License for more details.
 
 #define NOMINMAX
 
-#ifdef _WIN32
+#if defined(_WIN32) && !defined(_XBOX)
 #include <windows.h>
+#elif defined(_XBOX)
+#include <xtl.h>
 #endif
 
 #include "port.h"

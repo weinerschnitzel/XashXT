@@ -16,7 +16,7 @@ GNU General Public License for more details.
 #ifndef PORT_H
 #define PORT_H
 
-#ifndef _WIN32
+#if !defined(_WIN32) && !defined(_XBOX)
     #include <limits.h>
     #include <dlfcn.h>
 
@@ -78,8 +78,10 @@ GNU General Public License for more details.
 #pragma GCC diagnostic ignored "-Wswitch"
 #pragma GCC diagnostic ignored "-Wunused-function"
 #pragma GCC diagnostic ignored "-Wnarrowing"
+#elif defined(_XBOX)
+	#include <xtl.h>
 #else
-    #define OS_LIB_EXT "dll"
+	#define OS_LIB_EXT "dll"
 #endif
 
 #endif
