@@ -370,9 +370,6 @@
 			<File
 				RelativePath=".\utils.h">
 			</File>
-			<File
-				RelativePath=".\xbox_depp.h">
-			</File>
 		</Filter>
 		<File
 			RelativePath=".\ReadMe.txt">
