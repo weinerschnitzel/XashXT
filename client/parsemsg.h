@@ -37,7 +37,6 @@
 #define DECLARE_COMMAND(y, x) void __CmdFunc_##x( void ) \
 { \
     gHUD.##y.UserCmd_##x( ); \
-
 }
 
 #else
